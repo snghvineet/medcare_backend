@@ -27,7 +27,7 @@ router.post('/signup', async (req, res, next) => {
 		res.send({ username: user.username, role: user.role });
 	} catch (err) {
 		console.log(err.message);
-		next(err);
+		// next(err);
 	}
 });
 

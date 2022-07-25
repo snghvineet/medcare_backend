@@ -30,7 +30,8 @@ app.use(morgan('dev'));
 app.use('/auth', authRouter);
 
 // In case route is not found
-app.use((req, res, next) => {
+app.use((err, req, res, next) => {
+	if (err) next(err);
 	const error = new Error(req.url + ' is not found!');
 	error.status = 404;
 	next(error);
