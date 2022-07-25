@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 
 const authRouter = require('./routes/auth');
+const testRouter = require('./routes/test');
 
 // MongoDB connection string
 const dbUrl =
@@ -28,10 +29,10 @@ app.use(morgan('dev'));
 
 // Routes for handling requests
 app.use('/auth', authRouter);
+app.use('/test', testRouter);
 
 // In case route is not found
-app.use((err, req, res, next) => {
-	if (err) next(err);
+app.use((req, res, next) => {
 	const error = new Error(req.url + ' is not found!');
 	error.status = 404;
 	next(error);
