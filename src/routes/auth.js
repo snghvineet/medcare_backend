@@ -29,4 +29,28 @@ router.post('/signup', async (req, res, next) => {
 	}
 });
 
+router.post('/signin', async (req, res) => {
+	const userDetails = req.body;
+	try {
+		// Finding a user with the given username
+		const user = await User.findOne({ username: userDetails.username });
+		if (user == null) {
+			const err = new Error('Invalid username or password.');
+			err.status = 401;
+			throw err;
+		}
+		const passMatch = await bcrypt.compare(userDetails.password, user.password);
+		if (!passMatch) {
+			const err = new Error('Invalid username or password.');
+			err.status = 401;
+			throw err;
+		}
+		const token = JWTAuth.signJWT(user);
+		res.send({ id: user._id, token: token });
+	} catch (err) {
+		console.log(err.message);
+		next(err);
+	}
+});
+
 module.exports = router;
